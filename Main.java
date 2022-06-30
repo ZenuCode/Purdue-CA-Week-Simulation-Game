@@ -19,7 +19,7 @@ class Person {
     int prefNight;
     int workedHour;
     int change;
-
+ 
     int[] prefArray;
     int used;
 
