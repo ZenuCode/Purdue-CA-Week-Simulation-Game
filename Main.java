@@ -46,18 +46,6 @@ class Person {
     }
 }
 
-class Time {
-    int day ;
-    int hour;
-    int minute;
-    
-    public Time() {
-        this.day = 0;
-        this.hour = 0;
-        this.minute = 0;
-    }
-}
-
 class CA {
     int situation;
     
@@ -217,50 +205,195 @@ public class Main {
         printFormatArray(theWeekMail, 3);
 
     }
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	
     
     private static void playGame(String[][] theSlaves, String[][] theFDesk, String[][] theMDesk, String[][] theMailRoom) {
         int finish = 0;
+        int day = 0;
+        int hour = 8;
+        int minute = 0;
+        String shiftPerson = theFDesk[hour][day];
         Time time = new Time();
+        
         while(finish != 1) {
-            time.minute += 1;
+            minute += 1;
+            if(minute = 60) {
+                hour += 1;
+                minute = 0;
+            }
             finish = checkSituation();
-            if(finish == 1) { System.out.println("You failed as a CA! Good luck!"); }
+            finish = checkPerson();
+            if(finish == 1) { System.out.println("You failed as a CA! Good luck!"); break; }
         
     }
     
     private static int checkSituation() {
         Random random = new Random();
-        int upperbound = 100;
-        float floatRandom = random.nextFloat(upperbound);
+        float floatRandom = random.nextFloat(100);
+		int userInt = 0;
+		int solved = 0;
+		CA student = new CA();
+		SCC staff = new SCC();
+		Alex alex = new Alex();
+		Authority board = new Authority():
         
-        String[] situationOne = {"You have recieved a call from a parent regarding student move ins",
+        if(floatRandom >= 60 && floatRandom < 85) {
+            String[] situationOne = {"You have recieved a call from a parent regarding student move ins",
                                  "Conference member came to the front desk for linen exchange",
                                  "A student is asking for some help with directions on campus,
                                  "A phone call came in asking to talk with the hall manager",
                                  "The vending machine is empty! People are constantly asking the front desk to fill it up!"};
-        String[] situationTwo = {"There are too many people checking in for conferences!",
+			int intRandom = random.nextInt(situationOne.length());
+			System.out.println(situationOne[intRandom]);
+			printSolutions();
+			userInt = scanner.nextInt();
+			if(userInt == 1) { 
+				solved = student.randChance(1);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			} else if(userInt == 2) {
+				solved = staff.randChance(1);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			} else if(userInt == 3) {
+				solved = alex.randChance(1);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			} else if(userInt == 4) {
+				solved = board.randChance(1);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			}
+        } else if(floatRandom >= 85 && floatRandom < 95) {
+            String[] situationTwo = {"There are too many people checking in for conferences!",
                                  "There is a StarRez issue with a summer student check in!",
                                  "Someone checking in is not registered in StarRez",
                                  "You have something urgent that happened and need to leave the desk"};
-        String[] situationThree = {"One of the rooms is leaking water from the backroom!",
+			int intRandom = random.nextInt(situationOne.length());
+			System.out.println(situationOne[intRandom]);
+			printSolutions();
+			userInt = scanner.nextInt();
+			if(userInt == 1) { 
+				solved = student.randChance(2);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			} else if(userInt == 2) {
+				solved = staff.randChance(2);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			} else if(userInt == 3) {
+				solved = alex.randChance(2);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			} else if(userInt == 4) {
+				solved = board.randChance(2);
+				if(solved == 1) {
+					System.out.println("The problem has been solved! Good job!");
+					System.out.println("Gained 10 stamina!");
+					//Code to get stamina depending on the situation.
+				} else if(solved == 0) {
+					System.out.println("Your decision has made the situation worse.");
+					System.out.println("You lose a life and 10 stamina");
+					//Code to lose a life and stamina
+				}
+				solved = 0;
+			}
+        } else if(floatRandom >= 95 && floatRandom < 98) {
+            String[] situationThree = {"One of the rooms is leaking water from the backroom!",
                                    "There is a wild animal that entered the residence hall!",
                                    "We have found alcohol in one of the residence rooms!",
                                    "One of the elevators has broken down.",
                                    "The lights of a residence building went down!",
                                    "A stranger is forcefully trying to enter the residence hall"};
-        String[] situationFour = {"The President of Purdue has walked into the building!",
+			int intRandom = random.nextInt(situationThree.length());
+        } else if(floatRandom >= 98 && floatRandom < 99) {
+            String[] situationFour = {"The President of Purdue has walked into the building!",
                                   "A car crashed into the residence hall.",
                                   "There is someone with a weapon trying to enter the residence hall",
                                   "A conference member has disappeared!"};
+			int intRandom = random.nextInt(situationFour.length());
+        }
+        
+       
+       
+       
+       
         String[] slackOff = {"You are hungry and the dining court is open.",
                              "Maybe you magically had a sleeping pill in your food. You.. are... dozing..... o..f...f....",
                              "The phone is ringing, but you don't feel like answering it.",
                              "You accidently spilled your drink on the floor.",
                              "You forgot your conference shirt at home",
-                             "Someone asks you to play airhockey!"};
-        
+                             "Someone asks you to play airhockey!"};	
     }
 
+	private static void printSolutions() {
+		System.out.println("1. Solve it yourself");
+		System.out.println("2. Call the SCC");
+		System.out.println("3. Call Alex");
+		System.out.println("4. Need Authority Staff");
+	}
+	//////////////////////////////////////////////////////////////////////////////////////
+		
+		
     private static void printFormatArray(String[][] inputArr, int type) {
         int row = inputArr.length;
         int col = inputArr[0].length;
