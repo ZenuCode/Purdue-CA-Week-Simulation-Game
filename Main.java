@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.Random;
 
 class Person {
     String name;
@@ -22,7 +23,6 @@ class Person {
     int[] prefArray;
     int used;
 
-
     public Person(String name, int[][] allSchedule, int change, int prefDay, int prefNoon, int prefNight, int num) {
         this.name = name;
         int indexOne = num * 7;
@@ -32,6 +32,7 @@ class Person {
                 temp[i][j] = allSchedule[i][j + indexOne];
             }
         }
+        
         this.avail = temp;
         this.change = change;
         this.prefDay = prefDay;
@@ -44,6 +45,119 @@ class Person {
         System.out.println("Hi " + name);
     }
 }
+
+class Time {
+    int day ;
+    int hour;
+    int minute;
+    
+    public Time() {
+        this.day = 0;
+        this.hour = 0;
+        this.minute = 0;
+    }
+}
+
+class CA {
+    int situation;
+    
+    public int randChance(int situation) {
+        Random random = new Random();
+        int upperbound = 100;
+        int intRandom = random.nextInt(upperbound);
+        if(situation == 1) { 
+            return 1; 
+        } else if(situation == 2) {
+            if(intRnadom < 50) {
+                return 1;
+            } else {
+                return 0 ;
+            }
+        } else if(situation == 3) {
+            if(intRandom < 25) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else if(situation == 4) {
+            if(intRandom < 5) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+}
+
+class SCC {
+    int situation;
+    
+    public int randChance(int situation) {
+        Random random = new Random();
+        int upperbound = 100;
+        int intRandom = random.nextInt(upperbound);
+        if(situation == 1 || situation == 2) { 
+            return 1; 
+        } else if(situation == 3) {
+            if(intRandom < 60) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else if(situation == 4) {
+            if(intRandom < 25) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+}
+
+class Alex {
+    int situation;
+    
+    public int randChance(int situation) {
+        Random random = new Random();
+        int upperbound = 100;
+        int intRandom = random.nextInt(upperbound);
+        if(situation == 1 || situation == 2) { 
+            return 1; 
+        } else if(situation == 3) {
+            if(intRandom < 70) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else if(situation == 4) {
+            if(intRandom < 50) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+}
+
+class Authority {
+    int situation;
+    
+    public int randChance(int situation) {
+        Random random = new Random();
+        int upperbound = 100;
+        int intRandom = random.nextInt(upperbound);
+        if(situation == 1 || situation == 2 || situation == 3) { 
+            return 1; 
+        } else if(situation == 4) {
+            if(intRandom < 95) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+}
+
 
 public class Main {
     final static Scanner scanner = new Scanner(System.in);
@@ -102,7 +216,49 @@ public class Main {
         printFormatArray(theMDesk, 2);
         printFormatArray(theWeekMail, 3);
 
-
+    }
+    
+    private static void playGame(String[][] theSlaves, String[][] theFDesk, String[][] theMDesk, String[][] theMailRoom) {
+        int finish = 0;
+        Time time = new Time();
+        while(finish != 1) {
+            time.minute += 1;
+            finish = checkSituation();
+            if(finish == 1) { System.out.println("You failed as a CA! Good luck!"); }
+        
+    }
+    
+    private static int checkSituation() {
+        Random random = new Random();
+        int upperbound = 100;
+        float floatRandom = random.nextFloat(upperbound);
+        
+        String[] situationOne = {"You have recieved a call from a parent regarding student move ins",
+                                 "Conference member came to the front desk for linen exchange",
+                                 "A student is asking for some help with directions on campus,
+                                 "A phone call came in asking to talk with the hall manager",
+                                 "The vending machine is empty! People are constantly asking the front desk to fill it up!"};
+        String[] situationTwo = {"There are too many people checking in for conferences!",
+                                 "There is a StarRez issue with a summer student check in!",
+                                 "Someone checking in is not registered in StarRez",
+                                 "You have something urgent that happened and need to leave the desk"};
+        String[] situationThree = {"One of the rooms is leaking water from the backroom!",
+                                   "There is a wild animal that entered the residence hall!",
+                                   "We have found alcohol in one of the residence rooms!",
+                                   "One of the elevators has broken down.",
+                                   "The lights of a residence building went down!",
+                                   "A stranger is forcefully trying to enter the residence hall"};
+        String[] situationFour = {"The President of Purdue has walked into the building!",
+                                  "A car crashed into the residence hall.",
+                                  "There is someone with a weapon trying to enter the residence hall",
+                                  "A conference member has disappeared!"};
+        String[] slackOff = {"You are hungry and the dining court is open.",
+                             "Maybe you magically had a sleeping pill in your food. You.. are... dozing..... o..f...f....",
+                             "The phone is ringing, but you don't feel like answering it.",
+                             "You accidently spilled your drink on the floor.",
+                             "You forgot your conference shirt at home",
+                             "Someone asks you to play airhockey!"};
+        
     }
 
     private static void printFormatArray(String[][] inputArr, int type) {
