@@ -45,7 +45,7 @@ class Person {
         this.prefArray = new int[3];
         this.used = 0;
 
-        this.stamina = 70;
+        this.stamina = 10;
         this.life = 3;
         System.out.println("Hi " + name);
     }
@@ -263,7 +263,7 @@ public class Main {
                 if(userInt < 1 || userInt > 2) {
                     System.out.println("Please enter a valid number");
                 }
-                if(userInt == 1) { changeSchedule(theFDesk, theMDesk, theWeekMail); }
+                if(userInt == 1) { changeSchedule(theFDesk, theMDesk, theWeekMail, theSlaves); }
             }
         }
 
@@ -385,7 +385,7 @@ public class Main {
                                     System.out.println("Please enter a valid number");
                                 }
                                 if (userInt == 1) {
-                                    changeSchedule(theFDesk, theMDesk, theMailRoom);
+                                    changeSchedule(theFDesk, theMDesk, theMailRoom, theSlaves);
                                 }
                             }
                         }
@@ -401,7 +401,10 @@ public class Main {
 
             checkSituation(day, hour, minute, theSlaves, shiftPerson);
             finish = checkPerson(day, hour, minute, theSlaves, shiftPerson, theFDesk, theMDesk, theMailRoom);
-            if(finish == 1) { System.out.println("You failed as a CA! Good luck!"); break; }
+            if(finish == 1) { 
+                System.out.println("You failed as a CA! Good luck!");  
+                return 2;
+            }
         }
         return 0;
     }
@@ -430,7 +433,7 @@ public class Main {
         System.out.println("\n");
     }
 
-    private static int checkPerson(int day, int hour, int minute, Person[] theSlaves, String shiftPerson, String[][] FDesk, String[][] MDesk, String[][] mailRoom) {
+    private static int checkPerson(int day, int hour, int minute, Person[] theSlaves, String shiftPerson, String[][] FDesk, String[][] MDesk, String[][] mailRoom) throws InterruptedException {
         int index = 0;
         for(int i = 0; i < theSlaves.length; i++) {
             if(shiftPerson.replaceAll("\\s+","").equalsIgnoreCase(theSlaves[i].name.replaceAll("\\s+",""))) { index = i; }
@@ -439,7 +442,7 @@ public class Main {
 
 
         int userInt = 10;
-        if(theSlaves[index].stamina < 30) {
+        if(theSlaves[index].stamina < 0) {
             Random random = new Random();
             String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
             int timeAdd = random.nextInt(25);
@@ -475,7 +478,7 @@ public class Main {
                     randomInt = random.nextInt(2);
                     if(randomInt == 0) {
                         theSlaves[index].life -= 1;
-                        theSlaves[index].stamina = 70;
+                        theSlaves[index].stamina = 10;
                         System.out.printf("%s lost a life!\n", theSlaves[index].name);
                     }
                 } else {
@@ -493,36 +496,117 @@ public class Main {
         if(theSlaves[index].stamina < 0) {
             System.out.printf("%s doesn't have enough stamina. %s loses a life\n", theSlaves[index].name, theSlaves[index].name);
             theSlaves[index].life -= 1;
-            theSlaves[index].stamina = 70;
+            theSlaves[index].stamina = 10;
         }
+
+        int count = 0;
         if(theSlaves[index].life <= 0) {
-            System.out.printf("%s has lost all lives.\nHis remaining schedule will be emptied.", theSlaves[index].name);
+            System.out.printf("%s has lost all lives.\nHis remaining schedule will be emptied.\n\n", theSlaves[index].name);
             for(int i = 0; i < FDesk.length; i++) {
                 for(int j = 0; j < FDesk[0].length; j++) {
-                    if(!FDesk[i][j].replaceAll("\\s+","").equalsIgnoreCase(theSlaves[index].name.replaceAll("\\s+",""))) {
+                    if(FDesk[i][j].replaceAll("\\s+","").equalsIgnoreCase(theSlaves[index].name.replaceAll("\\s+",""))) {
                         FDesk[i][j] = "Empty";
                     }
+                    if(FDesk[i][j].replaceAll("\\s+","").equalsIgnoreCase("Empty".replaceAll("\\s+",""))) {
+                        count++;
+                    }
                 }
             }
+            if(count == 21) { return 1; }
+
             for(int i = 0; i < MDesk.length; i++) {
-                for(int j = 0; j < MDesk[0].length - 1; j++) {
-                    if(!MDesk[i][j].replaceAll("\\s+","").equalsIgnoreCase(theSlaves[index].name.replaceAll("\\s+",""))) {
+                for(int j = 0; j < MDesk[0].length; j++) {
+                    if(MDesk[i][j].replaceAll("\\s+","").equalsIgnoreCase(theSlaves[index].name.replaceAll("\\s+",""))) {
                         MDesk[i][j] = "Empty";
                     }
-                }
-            }
-            for(int i = 0; i < mailRoom.length; i++) {
-                for(int j = 0; j < mailRoom[0].length; j++) {
-                    if(!mailRoom[i][j].replaceAll("\\s+","").equalsIgnoreCase(theSlaves[index].name.replaceAll("\\s+",""))) {
-                        mailRoom[i][j] = "Empty";
+                    if(MDesk[i][j].replaceAll("\\s+","").equalsIgnoreCase("Empty".replaceAll("\\s+",""))) {
+                        count++;
                     }
                 }
             }
+            if(count == 21) { return 1; }
+
+            for(int i = 0; i < mailRoom.length; i++) {
+                for(int j = 0; j < mailRoom[0].length; j++) {
+                    if(mailRoom[i][j].replaceAll("\\s+","").equalsIgnoreCase(theSlaves[index].name.replaceAll("\\s+",""))) {
+                        mailRoom[i][j] = "Empty";
+                    }
+                    if(mailRoom[i][j].replaceAll("\\s+","").equalsIgnoreCase("Empty".replaceAll("\\s+",""))) {
+                        count++;
+                    }
+                }
+            }
+            if(count == 14) { return 1; }
+
             theSlaves[index].name = "Lost Employee";
         }
 
         //Need to include warning about empty schedule;
+        int emptyWarning = 0;
 
+        for(int i = 0; i < FDesk.length; i++) {
+            for(int j = 0; j < FDesk[0].length; j++) {
+                if(FDesk[i][j].equals("Empty")) {
+                    emptyWarning++;
+                    break;
+                } else if(MDesk[i][j].equals("Empty")) {
+                    emptyWarning++;
+                    break;
+                }
+            }
+        }
+        for(int i = 0; i < mailRoom.length; i++) {
+            for(int j = 0; j < mailRoom[0].length; j++) {
+                if(mailRoom[i][j].equals("Empty")) {
+                    emptyWarning++;
+                    break;
+                }
+            }
+        }
+
+        if(emptyWarning >= 1) {
+            System.out.println("There are empty schedules.");
+            System.out.println("Would you like to fill them?");
+            System.out.println("Note: If empty shift is found, all employee stamina will decrease");
+            System.out.println("1. Yes, go to fill schedule\n2. No, Proceed");
+            userInt = scanner.nextInt();
+            if(userInt == 1) {
+                while (userInt != 3) {
+                    System.out.println("\nManager Status Checkup");
+                    System.out.println("1. Check Employee Status");
+                    System.out.println("2. Change Shifts");
+                    System.out.println("3. Done");
+                    userInt = scanner.nextInt();
+                    if (userInt == 1) {
+                        slavesStatusPrint(theSlaves);
+                    } else if (userInt == 2) {
+                        printFormatArray(FDesk, 1);
+                        printFormatArray(MDesk, 2);
+                        printFormatArray(mailRoom, 3);
+                        userInt = 10;
+                        while (userInt < 1 || userInt > 2) {
+                            System.out.println("Would you like to edit the schedule?\n");
+                            System.out.println("1. Yes");
+                            System.out.println("2. No (Proceed to Game)\n");
+                            try {
+                                userInt = scanner.nextInt();
+                            } catch (InputMismatchException e) {
+                                System.out.println("Please enter a valid number");
+                                scanner.nextLine();
+                                userInt = 10;
+                                continue;
+                            }
+                            if (userInt < 1 || userInt > 2) {
+                                System.out.println("Please enter a valid number");
+                            }
+                            if (userInt == 1) {
+                                changeSchedule(FDesk, MDesk, mailRoom, theSlaves);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return 0;
     }
 
@@ -690,14 +774,15 @@ public class Main {
         System.out.println("4. Need Authority Staff");
     }
 
-    private static void changeSchedule(String[][] theFDesk, String[][] theMDesk, String[][] theWeekMail) throws InterruptedException {
+    private static void changeSchedule(String[][] theFDesk, String[][] theMDesk, String[][] theWeekMail, Person[] theSlaves) throws InterruptedException {
         int userInt = 10;
-        while(userInt < 1 || userInt > 3) {
+        while(userInt < 1 || userInt > 4) {
             System.out.println("\nEditing Schedule");
             System.out.println("Choose Option:");
             System.out.println("1. See Current Employee Schedule");
             System.out.println("2. Change Employee Schedule");
-            System.out.println("3. Continue to Game");
+            System.out.println("3. Fill empty schedules to one/random name");
+            System.out.println("4. Continue to Game");
             try {
                 userInt = scanner.nextInt();
             } catch (InputMismatchException e) {
@@ -706,7 +791,7 @@ public class Main {
                 userInt = 10;
                 continue;
             }
-            if(userInt < 1 || userInt > 3) {
+            if(userInt < 1 || userInt > 4) {
                 System.out.println("Please enter a valid number");
             }
             if(userInt == 1) {
@@ -717,6 +802,80 @@ public class Main {
             } else if(userInt == 2) {
                 swapShift(theFDesk, theMDesk, theWeekMail);
                 userInt = 10;
+            } else if(userInt == 3) {
+                String oneName = new String();
+                System.out.println("1. Fill one name\n2. Fill with random names");
+                int option = scanner.nextInt();
+                if(option == 1) {
+                    System.out.println("Enter name:");
+                    scanner.nextLine();
+                    oneName = scanner.nextLine();
+                    fillNames(theSlaves, theFDesk, theMDesk, theWeekMail, oneName);
+                } else if(option == 2) {
+                    fillNames(theSlaves, theFDesk, theMDesk, theWeekMail, oneName);
+                }
+                System.out.println("\nSchedule has been filled!");
+                userInt = 10;
+            }
+        }
+    }
+
+    private static void fillNames(Person[] theSlaves, String[][] theFDesk, String[][] theMDesk, String[][] theWeekMail, String oneName) {
+        Random random = new Random();
+        String empty = "Empty";
+
+        if(oneName == null || oneName.equals("")) { //Check if random
+            for (int i = 0; i < theFDesk.length; i++) {
+                for (int j = 0; j < theFDesk[0].length; j++) {
+                    if (theFDesk[i][j].replaceAll("\\s+", "").equalsIgnoreCase(empty.replaceAll("\\s+", ""))) {
+                        int randInt = random.nextInt(theSlaves.length);
+                        while (theSlaves[randInt].name.equals("Lost Employee")) {
+                            randInt++;
+                            randInt = randInt % theSlaves.length;
+                        }
+                        theFDesk[i][j] = theSlaves[randInt].name;
+                    }
+                    if (theMDesk[i][j].replaceAll("\\s+", "").equalsIgnoreCase(empty.replaceAll("\\s+", ""))) {
+                        int randInt = random.nextInt(theSlaves.length);
+                        while (theSlaves[randInt].name.equals("Lost Employee")) {
+                            randInt++;
+                            randInt = randInt % theSlaves.length;
+                        }
+                        theMDesk[i][j] = theSlaves[randInt].name;
+                    }
+                }
+            }
+
+            for (int i = 0; i < theWeekMail.length; i++) {
+                for (int j = 0; j < theWeekMail[0].length; j++) {
+                    if (theWeekMail[i][j].replaceAll("\\s+", "").equalsIgnoreCase(empty.replaceAll("\\s+", ""))) {
+                        int randInt = random.nextInt(theSlaves.length);
+                        while (theSlaves[randInt].name.equals("Lost Employee")) {
+                            randInt++;
+                            randInt = randInt % theSlaves.length;
+                        }
+                        theWeekMail[i][j] = theSlaves[randInt].name;
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < theFDesk.length; i++) {
+                for (int j = 0; j < theFDesk[0].length; j++) {
+                    if (theFDesk[i][j].replaceAll("\\s+", "").equalsIgnoreCase(empty.replaceAll("\\s+", ""))) {
+                        theFDesk[i][j] = oneName;
+                    }
+                    if (theMDesk[i][j].replaceAll("\\s+", "").equalsIgnoreCase(empty.replaceAll("\\s+", ""))) {
+                        theMDesk[i][j] = oneName;
+                    }
+                }
+            }
+
+            for (int i = 0; i < theWeekMail.length; i++) {
+                for (int j = 0; j < theWeekMail[0].length; j++) {
+                    if (theWeekMail[i][j].replaceAll("\\s+", "").equalsIgnoreCase(empty.replaceAll("\\s+", ""))) {
+                        theWeekMail[i][j] = oneName;
+                    }
+                }
             }
         }
     }
