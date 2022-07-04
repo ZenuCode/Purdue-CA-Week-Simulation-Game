@@ -24,8 +24,6 @@ class Person {
     int stamina;
     int life;
 
-
-
     public Person(String name, int[][] allSchedule, int change, int prefDay, int prefNoon, int prefNight, int num) {
         this.name = name;
         int indexOne = num * 7;
@@ -45,7 +43,7 @@ class Person {
         this.prefArray = new int[3];
         this.used = 0;
 
-        this.stamina = 10;
+        this.stamina = 70;
         this.life = 3;
         System.out.println("Hi " + name);
     }
@@ -61,23 +59,14 @@ class CA {
         if(situation == 1) {
             return 1;
         } else if(situation == 2) {
-            if(intRandom < 50) {
-                return 1;
-            } else {
-                return 0 ;
-            }
+            if(intRandom < 50) { return 1;
+            } else { return 0 ; }
         } else if(situation == 3) {
-            if(intRandom < 25) {
-                return 1;
-            } else {
-                return 0;
-            }
+            if(intRandom < 25) { return 1;
+            } else { return 0; }
         } else if(situation == 4) {
-            if(intRandom < 5) {
-                return 1;
-            } else {
-                return 0;
-            }
+            if(intRandom < 5) { return 1;
+            } else { return 0;}
         }
         return 0;
     }
@@ -93,17 +82,11 @@ class SCC {
         if(situation == 1 || situation == 2) {
             return 1;
         } else if(situation == 3) {
-            if(intRandom < 60) {
-                return 1;
-            } else {
-                return 0;
-            }
+            if(intRandom < 60) { return 1;
+            } else { return 0;}
         } else if(situation == 4) {
-            if(intRandom < 25) {
-                return 1;
-            } else {
-                return 0;
-            }
+            if(intRandom < 25) { return 1;
+            } else { return 0;}
         }
         return 0;
     }
@@ -275,16 +258,19 @@ public class Main {
         int freida = 0; int meredith = 0; int mailroom = 0; //Turns 1 if cleared
         int cleared = 0;
         int finishGame = 0;
-        while(freida != 1 && meredith != 1 && mailroom != 1) {
+        int one = 1;
+        while((freida != one)  || (meredith != one) || (mailroom != one)) {
+            cleared = 0;
             if(choice == 1) { freida = playGame(theSlaves, theFDesk, theMDesk, theWeekMail, 1); };
             if(choice == 2) { meredith = playGame(theSlaves, theFDesk, theMDesk, theWeekMail, 2); };
-            //if(choice == 3) { mailroom = playMail(theSlaves, theFDesk, theMDesk, theWeekMail); };
+            if(choice == 3) { mailroom = playMail(theSlaves, theFDesk, theMDesk, theWeekMail); };
 
             if(freida == 2 || meredith == 2 || mailroom == 2) {
-                //GameOVER HERE
+                System.out.println("Purdue's Conferences has been a failure due to your scheduling and decisions!");
+                System.out.println("Good luck next time!");
             }
 
-            while(cleared != 1 || finishGame != 1) {
+            while((cleared != one) && (finishGame != one)) {
                 if(freida == 1 && meredith == 1 && mailroom == 1) {
                     finishGame = 1;
                     continue;
@@ -305,6 +291,118 @@ public class Main {
                     cleared = 1;
                 }
             }
+        }
+        System.out.println("Congratulations! You have been a successful CA!");
+    }
+
+    private static int playMail(Person[] theSlaves, String[][] theFDesk, String[][] theMDesk, String[][] theWeekMail) throws InterruptedException {
+        int finish = 0;
+        int day = 6;
+        int hour = 9;
+        int minute = 0;
+        int position = 0;
+        String shiftPerson = new String();
+        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+        int trigger = 0;
+        int saveDay = 0;
+        while (day != 7) {
+            if (hour >= 9 && hour < 12) {
+                position = 0;
+            } else if (hour >= 17 && hour < 19) {
+                position = 1;
+            }
+
+            if (!shiftPerson.replaceAll("\\s+", "").equalsIgnoreCase(theWeekMail[position][day].replaceAll("\\s+", ""))) {
+                System.out.printf("\nNew person on Shift!\nName: %s\n", theWeekMail[position][day]);
+                shiftPerson = theWeekMail[position][day];
+                trigger = 1;
+            }
+
+            printMail(theSlaves, shiftPerson);
+
+            String adjustedTime = new String();
+            int adjustedHour = 0;
+            if (hour >= 17) {
+                hour = 9;
+                day++;
+            } else if (hour == 12) { hour = 15;}
+
+            if (day == 7) {
+                int check = checkEnding(theWeekMail);
+                if (check == 0) {
+                    return 1;
+                }
+                return 2;
+            }
+
+            if (hour > 12) {
+                adjustedHour = hour % 12;
+                adjustedTime = adjustedHour + "PM";
+            } else {
+                adjustedTime = hour + "AM";
+            }
+
+            if (trigger == 1) {
+                System.out.printf("Current Time - Day: %s, Hour: %s, Minute: %d\n\n", days[day], adjustedTime, minute);
+                if (saveDay != day) {
+                    saveDay = day;
+                    int userInt = 10;
+                    while (userInt != 3) {
+                        System.out.println("Manager Status Checkup");
+                        System.out.println("1. Check Employee Status");
+                        System.out.println("2. Change Shifts");
+                        System.out.println("3. Done");
+                        userInt = scanner.nextInt();
+                        if (userInt == 1) {
+                            slavesStatusPrint(theSlaves);
+                        } else if (userInt == 2) {
+                            printFormatArray(theFDesk, 1);
+                            printFormatArray(theMDesk, 2);
+                            printFormatArray(theWeekMail, 3);
+                            userInt = 10;
+                            while (userInt < 1 || userInt > 2) {
+                                System.out.println("Would you like to edit the schedule?\n");
+                                System.out.println("1. Yes");
+                                System.out.println("2. No (Proceed to Game)\n");
+                                try {
+                                    userInt = scanner.nextInt();
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Please enter a valid number");
+                                    scanner.nextLine();
+                                    userInt = 10;
+                                    continue;
+                                }
+                                if (userInt < 1 || userInt > 2) {
+                                    System.out.println("Please enter a valid number");
+                                }
+                                if (userInt == 1) {
+                                    changeSchedule(theFDesk, theMDesk, theWeekMail, theSlaves);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            hour++;
+        }
+        return 0;
+    }
+
+    private static void printMail(Person[] theSlaves, String shiftPerson) {
+        //Create situations and solve with random numbers
+        String[] situations = {"New mail has come though! Check them in?"};
+        Random random = new Random();
+        int randInt = random.nextInt(situations.length);
+
+        System.out.println(situations[randInt]);
+
+        System.out.println("1. Yes!\n2. Nope.");
+        int userInt = scanner.nextInt();
+        if(userInt == 1) {
+            System.out.println("Great job!");
+        } else {
+            System.out.println("You only had one job... And you didn't do it xD.");
         }
     }
 
@@ -401,8 +499,8 @@ public class Main {
 
             checkSituation(day, hour, minute, theSlaves, shiftPerson);
             finish = checkPerson(day, hour, minute, theSlaves, shiftPerson, theFDesk, theMDesk, theMailRoom);
-            if(finish == 1) { 
-                System.out.println("You failed as a CA! Good luck!");  
+            if(finish == 1) {
+                System.out.println("You have no employees left...");
                 return 2;
             }
         }
@@ -411,14 +509,19 @@ public class Main {
 
     private static int checkEnding(String[][] assignedHall) {
         int count = 0;
+        int totalCount = 0;
+        String word = "Lost Employee";
         for(int i = 0; i < assignedHall.length; i++) {
             for(int j = 0; j < assignedHall[0].length; j++) {
-                if(assignedHall[i][j].equals("Lost Employee")) {
+                if(assignedHall[i][j].replaceAll("\\s+","").equalsIgnoreCase(word.replaceAll("\\s+",""))) {
                     count++;
                 }
+                totalCount++;
             }
         }
-        if(count == 21) { return 1; }
+        if(count == 21 && totalCount == 28) { return 1; }
+        else if(count == 14 && totalCount == 14) { return 1; }
+
         return 0;
     }
 
@@ -442,7 +545,7 @@ public class Main {
 
 
         int userInt = 10;
-        if(theSlaves[index].stamina < 0) {
+        if(theSlaves[index].stamina < 30) {
             Random random = new Random();
             String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
             int timeAdd = random.nextInt(25);
@@ -478,7 +581,7 @@ public class Main {
                     randomInt = random.nextInt(2);
                     if(randomInt == 0) {
                         theSlaves[index].life -= 1;
-                        theSlaves[index].stamina = 10;
+                        theSlaves[index].stamina = 70;
                         System.out.printf("%s lost a life!\n", theSlaves[index].name);
                     }
                 } else {
@@ -496,7 +599,7 @@ public class Main {
         if(theSlaves[index].stamina < 0) {
             System.out.printf("%s doesn't have enough stamina. %s loses a life\n", theSlaves[index].name, theSlaves[index].name);
             theSlaves[index].life -= 1;
-            theSlaves[index].stamina = 10;
+            theSlaves[index].stamina = 70;
         }
 
         int count = 0;
