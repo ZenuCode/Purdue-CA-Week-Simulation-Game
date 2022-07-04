@@ -16,6 +16,7 @@ Working as a Summer Conference Assistant (CA) at Purdue, I wanted to create a sc
   - After schedule is created, you are able to swap schedules before the game is started.
   
 2. The Game Rules
+
 Basic Rules:
   - There are 3 parts of the game to be cleared: Frieda Parker Halls, Meredith South Halls and the Mail Room.
   - Each employee in your schedule is given 3 lives and 70 stamina at the start.
