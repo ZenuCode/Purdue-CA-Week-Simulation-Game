@@ -14,7 +14,7 @@ Working as a Summer Conference Assistant (CA) at Purdue, I wanted to create a sc
 1. The Schedule
   - The game starts with reading a csv file which uses that data to assign the most effecient and preferred schedule.
   - After schedule is created, you are able to swap schedules before the game is started.
-  -
+  
 2. The Game Rules
 Basic Rules:
   - There are 3 parts of the game to be cleared: Frieda Parker Halls, Meredith South Halls and the Mail Room.
